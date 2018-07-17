@@ -1,8 +1,13 @@
 if (typeof require !== 'undefined') {
-  var expect = require('chai').expect;
-  var assert = require('chai').assert;
+  var chai = require('chai');
+  // var spies = require('chai-spies');
+  // chai.use(spies);
+  
+  var originalExpect = global.expect;
+  var expect = chai.expect;
+  var assert = chai.assert;
   // var assert = require('assert');
-  var should = require('chai').should();
+  var should = chai.should();
   // var main = require ('../main');
   var rewire = require('rewire');
   var main = rewire('../main');
@@ -12,6 +17,8 @@ if (typeof require !== 'undefined') {
   var fetchTripDetails = main.__get__('fetchTripDetails');
   var fetchSomeDetails = main.__get__('fetchSomeDetails');
   var createPerson = main.__get__('createPerson');
+  var Person = rewire('../person');
+  Person = Person.__get__('Person');
 }
 
 describe('#initial tests', function() {
@@ -22,14 +29,14 @@ describe('#initial tests', function() {
   it('should validate user object', function() {
     expect('Baahubali' === '2.o').to.be.false;
     expect(user.name).to.equal('Aaron');
-    assert.isDefined(user);
 
     // assert.equal([1,2,3].indexOf(4), -1);
+    assert.isDefined(user);
     assert.isObject(user);
     assert.isString(user.name);
     assert.typeOf(user.age, 'number');
+    assert.isFunction(sayHello);
 
-    // sayHello().should.be.a('function');
     user.should.be.a('object');
     user.age.should.not.equal(22);
   });
@@ -51,7 +58,7 @@ describe('sayHello()', function() {
 
 describe('add()', function() { //name of test module
   var result = add(1, 4);
-  
+
   it('should return a + b', function() { //description of test module
     assert.equal(result, 5);
     assert.isAbove(result, 4);
@@ -59,6 +66,14 @@ describe('add()', function() { //name of test module
 
   it('should return number', function() { //description of test module
     assert.typeOf(result, 'number');
+  });
+});
+
+describe('#prototype/object testing', function() {
+  it('should test changes made', function() {
+    var person1 = createPerson('Aaron', 'Davies', 23);
+    assert.equal(person1.getFullName(), 'Aaron Davies');
+    assert.equal(person1.getAge(), 23);
   });
 });
 
@@ -82,7 +97,7 @@ describe('#hooks', function() {
 });
 
 describe('#asynchronous testing', function() {
-  // this.timeout(10000); //default timeout is 2000 ms
+  jest.setTimeout(25000); //overriding default timeout of 5000 ms
 
   it('should test callbacks', function(done) {
     fetchTripDetails(function(result) {
@@ -106,10 +121,26 @@ describe('#asynchronous testing', function() {
   });
 });
 
-describe('#prototype/object testing', function() {
-  it('should test changes made', function() {
-    var person1 = createPerson('Aaron', 'Davies', 23);
-    assert.equal(person1.getFullName(), 'Aaron Davies');
-    assert.equal(person1.getAge(), 23);
+describe('#mocks', function() {
+  it('should test mock function', function() {
+    var mockCallback = jest.fn();
+    var fruits = ['Apple', 'Orange', 'Mango'];
+    fruits.forEach(mockCallback);
+
+    expect(mockCallback.mock.calls.length).to.equal(3);
+    // The first argument of the first call to the function was 'Apple'
+    expect(mockCallback.mock.calls[0][0]).to.equal('Apple');
+    // The first argument of the third call to the function was 'Mango'
+    expect(mockCallback.mock.calls[2][0]).to.equal('Mango');
+  });
+});
+
+describe('#spy', function() {
+  it('should test spies', function() {
+    var person1 = new Person('Aaron', 'Davies', 23);
+    var spy = jest.spyOn(person1, 'setFirstName');
+    person1.setFirstName('Abraham');
+
+    originalExpect(spy).toBeCalled();
   });
 });
