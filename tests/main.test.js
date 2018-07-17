@@ -97,7 +97,7 @@ describe('#hooks', function() {
 });
 
 describe('#asynchronous testing', function() {
-  jest.setTimeout(25000); //overriding default timeout of 5000 ms
+  jest.setTimeout(20000); //overriding default timeout of 5000 ms
 
   it('should test callbacks', function(done) {
     fetchTripDetails(function(result) {
