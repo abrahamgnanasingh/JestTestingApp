@@ -28,6 +28,7 @@ function fetchTripDetails(success, error) {
 }
 
 function fetchSomeDetails() {
+    $('#header').css('background-color', 'blue');
     // return new Promise((resolve, reject) => {
     //     setTimeout(() => {
     //         resolve('oki');
