@@ -146,9 +146,15 @@ describe('#spy', function() {
     var person1 = new Person('Aaron', 'Davies', 23);
     var spy = jest.spyOn(person1, 'setFirstName');
     person1.setFirstName('Abraham');
-
-    originalExpect(spy).toBeCalled();
     originalExpect(spy).toHaveBeenCalledWith('Abraham');
+
+    spy.mockImplementation(() => 'mock');
+    person1.setFirstName('Abraham');
+    originalExpect(spy).toHaveReturnedWith('mock');
+
+    spy.mockReset();
+    person1.setFirstName('Gnanasingh');
+    originalExpect(spy).toHaveBeenCalledWith('Gnanasingh');
   });
 });
 
