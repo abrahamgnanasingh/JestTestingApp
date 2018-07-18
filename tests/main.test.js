@@ -132,6 +132,12 @@ describe('#mocks', function() {
     expect(mockCallback.mock.calls[0][0]).to.equal('Apple');
     // The first argument of the third call to the function was 'Mango'
     expect(mockCallback.mock.calls[2][0]).to.equal('Mango');
+
+    var mockFn = jest.fn(() => 'hello');
+    mockFn();
+    originalExpect(mockFn).toBeCalled();
+    originalExpect(mockFn).toHaveBeenCalledTimes(1);
+    originalExpect(mockFn).toHaveReturnedWith('hello');
   });
 });
 
@@ -142,5 +148,32 @@ describe('#spy', function() {
     person1.setFirstName('Abraham');
 
     originalExpect(spy).toBeCalled();
+    originalExpect(spy).toHaveBeenCalledWith('Abraham');
+  });
+});
+
+describe('#snapshot testing', function() {
+  // it('will fail every time', () => {
+  //   const user = {
+  //     createdAt: new Date(),
+  //     id: Math.floor(Math.random() * 20),
+  //     name: 'LeBron James'
+  //   };
+  
+  //   originalExpect(user).toMatchSnapshot();
+  // });
+
+  it('will check the matchers and pass', () => {
+    const user = {
+      createdAt: new Date(),
+      id: Math.floor(Math.random() * 20),
+      name: 'LeBron James'
+    };
+  
+    originalExpect(user).toMatchSnapshot({
+      createdAt: originalExpect.any(Date),
+      id: originalExpect.any(Number)
+      // name: 'LeBron James'
+    });
   });
 });
