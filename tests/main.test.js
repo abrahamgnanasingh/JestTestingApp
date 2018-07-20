@@ -115,6 +115,8 @@ describe('#asynchronous testing', function() {
       expect(result.milliseconds_since_epoch).to.be.a('number');
       expect(result.date).to.be.a('string');
       done();
+    }, function(error) {
+      done();
     });
   });
 });
