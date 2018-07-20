@@ -1,25 +1,23 @@
-if (typeof require !== 'undefined') {
-  var chai = require('chai');
-  // var spies = require('chai-spies');
-  // chai.use(spies);
-  
-  var originalExpect = global.expect;
-  var expect = chai.expect;
-  var assert = chai.assert;
-  // var assert = require('assert');
-  var should = chai.should();
-  // var main = require ('../main');
-  var rewire = require('rewire');
-  var main = rewire('../main');
-  var dom = main.__get__('dom');
-  var sayHello = main.__get__('sayHello');
-  var add = main.__get__('add');
-  var fetchTripDetails = main.__get__('fetchTripDetails');
-  var fetchSomeDetails = main.__get__('fetchSomeDetails');
-  var createPerson = main.__get__('createPerson');
-  var Person = rewire('../person');
-  Person = Person.__get__('Person');
-}
+var originalExpect = global.expect;
+var chai = require('chai');
+// var spies = require('chai-spies');
+// chai.use(spies);
+
+var expect = chai.expect;
+var assert = chai.assert;
+// var assert = require('assert');
+var should = chai.should();
+// var main = require ('../main');
+var rewire = require('rewire');
+var main = rewire('../main');
+var dom = main.__get__('dom');
+var sayHello = main.__get__('sayHello');
+var add = main.__get__('add');
+var fetchTripDetails = main.__get__('fetchTripDetails');
+var fetchSomeDetails = main.__get__('fetchSomeDetails');
+var createPerson = main.__get__('createPerson');
+var Person = rewire('../person');
+Person = Person.__get__('Person');
 
 describe('#initial tests', function() {
   var user = {
