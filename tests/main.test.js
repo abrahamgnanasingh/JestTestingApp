@@ -158,6 +158,49 @@ describe('#spy', function() {
   });
 });
 
+describe('Google', () => {
+  // const browser = await puppeteer.launch();
+  // const page = await browser.newPage();
+  beforeAll(async () => {
+    await page.goto('https://stagemeeting.zoho.com/meeting');
+    // await page.screenshot({path: 'zohomeeting.png'});
+  });
+
+  it('should display "google" text on page', async () => {
+    // await originalExpect(page).toMatch('google');
+    await page.goto('https://accounts.zoho.com/signin?servicename=ZohoMeeting&signupurl=https://www.zoho.com/meeting/signup.html');
+    // await page.evaluate(() => {
+    //   document.querySelector('a[class=signin]').click();
+    // });
+    // var p = page;
+    await page.type('#lid', 'abraham1991jpr@gmail.com');
+    await page.type('#pwd', 'thisisab123');
+    await page.click('#signin_submit');
+    var evaluatedPage = await page.evaluate(() => {
+      // document.querySelector('a[class=signin]').click();
+      // document.querySelector('#lid').value = 'abraham1991jpr@gmail.com';
+      // document.querySelector('#pwd').value = 'thisisab123';
+      // document.querySelector('#signin_submit').click();
+      return {
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight,
+        deviceScaleFactor: window.devicePixelRatio
+      };
+    });
+
+    await page.goto('https://stagemeeting.zoho.com/meeting', {timeout: 30000, waitUntil: 'load'});
+    await page.goto('https://stagemeeting.zoho.com/meeting', {timeout: 30000, waitUntil: 'load'});
+    evaluatedPage = await page.evaluate(() => {
+      return {
+        isFreeUser: window.isFreeUser
+      };
+    });
+    await page.screenshot({path: 'zohomeeting.png'});
+    console.log('Evaluated Page:', evaluatedPage);
+    expect(evaluatedPage.isFreeUser).to.equal(false);
+  });
+});
+
 describe('#snapshot testing', function() {
   // it('will fail every time', () => {
   //   const user = {
